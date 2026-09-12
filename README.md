@@ -69,6 +69,17 @@ See [API.md](API.md) for backend components and API details.
 
 See [RAG_PIPELINE.md](RAG_PIPELINE.md) for detailed explanation of the RAG workflow.
 
+## UI
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/cf0ef7be-3f5e-4fa8-af22-0cf6d2c80ef0" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3be9b901-2266-48ab-806e-d2b4093d429f" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a295c275-31d7-41ca-8bfe-6a4249b6d9d2" />
+
+
+
+
 ## License
 
 MIT License - feel free to use and modify this project for your own purposes.
