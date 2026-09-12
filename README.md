@@ -70,12 +70,12 @@ See [API.md](API.md) for backend components and API details.
 See [RAG_PIPELINE.md](RAG_PIPELINE.md) for detailed explanation of the RAG workflow.
 
 ## UI
+<img width="1895" height="919" alt="image" src="https://github.com/user-attachments/assets/0170ba68-98ad-44f7-bdb4-656e61aebf47" />
+<img width="1871" height="906" alt="image" src="https://github.com/user-attachments/assets/42e10eeb-14d1-4b81-a7b9-4d069cf96f86" />
+<img width="1866" height="914" alt="image" src="https://github.com/user-attachments/assets/5b897f4b-cd84-4c0c-818f-05f5c5fdc6bb" />
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/cf0ef7be-3f5e-4fa8-af22-0cf6d2c80ef0" />
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3be9b901-2266-48ab-806e-d2b4093d429f" />
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a295c275-31d7-41ca-8bfe-6a4249b6d9d2" />
 
 
 
