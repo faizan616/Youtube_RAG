@@ -1,5 +1,7 @@
+import os
 import re
-from youtube_transcript_api import YouTubeTranscriptApi
+
+import requests
 
 
 def extract_video_id(url: str) -> str:
@@ -9,6 +11,7 @@ def extract_video_id(url: str) -> str:
 
     for pattern in patterns:
         match = re.search(pattern, url)
+
         if match:
             return match.group(1)
 
@@ -17,46 +20,62 @@ def extract_video_id(url: str) -> str:
 
 def ingest_youtube_video(url: str) -> dict:
     """
-    Fetch the best available YouTube transcript and return the
-    language code supplied by YouTube itself.
+    Fetch a YouTube transcript through Supadata.
 
-    We intentionally do NOT use langdetect here. Transcript
-    language metadata is more reliable than guessing the language
-    from transcript text.
+    Supadata handles transcript retrieval from YouTube and returns
+    the transcript language metadata, so we do not need langdetect.
     """
+
     video_id = extract_video_id(url)
 
-    api = YouTubeTranscriptApi()
-    transcript_list = api.list(video_id)
+    api_key = os.getenv("SUPADATA_API_KEY")
 
-    # Prefer manually created transcripts.
-    transcript = None
+    if not api_key:
+        raise ValueError(
+            "SUPADATA_API_KEY is not configured."
+        )
 
-    for item in transcript_list:
-        if not item.is_generated:
-            transcript = item
-            break
-
-    # Fall back to an auto-generated transcript.
-    if transcript is None:
-        for item in transcript_list:
-            if item.is_generated:
-                transcript = item
-                break
-
-    if transcript is None:
-        raise ValueError("No transcript available for this video.")
-
-    fetched_transcript = transcript.fetch()
-
-    text = "\n".join(
-        snippet.text
-        for snippet in fetched_transcript
+    response = requests.get(
+        "https://api.supadata.ai/v1/transcript",
+        params={
+            "url": url,
+        },
+        headers={
+            "x-api-key": api_key,
+        },
+        timeout=60,
     )
 
-    # IMPORTANT:
-    # Use YouTube's actual transcript language metadata.
-    language_code = transcript.language_code
+    response.raise_for_status()
+
+    data = response.json()
+
+    if "content" not in data:
+        raise ValueError(
+            "Supadata did not return a transcript."
+        )
+
+    content = data["content"]
+
+    # Supadata returns transcript segments.
+    # Convert them into the plain text expected by the RAG pipeline.
+    if isinstance(content, list):
+        text = "\n".join(
+            segment["text"]
+            for segment in content
+            if segment.get("text")
+        )
+    else:
+        # Handles plain-text response if returned.
+        text = str(content)
+
+    if not text.strip():
+        raise ValueError(
+            "The transcript returned by Supadata is empty."
+        )
+
+    # Supadata provides the detected transcript language.
+    language_code = data.get("lang", "unknown")
 
     return {
         "video_id": video_id,
